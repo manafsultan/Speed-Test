@@ -1,37 +1,21 @@
 function testSpeed() {
     var startTime, endTime;
     var download = new Image();
-    var upload = new XMLHttpRequest();
-  
-    download.onload = function() {
+    download.onload = function () {
       endTime = (new Date()).getTime();
-      showResults((endTime - startTime) / 1000);
+      showResults(startTime, endTime);
     }
-  
     startTime = (new Date()).getTime();
     var cacheBuster = "?nnn=" + startTime;
-    download.src = "https://cachefly.cachefly.net/100mb.test" + cacheBuster;
-  
-    upload.onreadystatechange = function() {
-      if (upload.readyState == 4 && upload.status == 200) {
-        endTime = (new Date()).getTime();
-        showResults((endTime - startTime) / 1000);
-      }
-    }
-  
-    startTime = (new Date()).getTime();
-    var params = "download=" + (new Date()).getTime();
-    upload.open("POST", "/upload.php", true);
-    upload.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    upload.send(params);
-  
-    document.getElementById("test-btn").disabled = true;
-    document.getElementById("result").innerHTML = "Testing...";
+    download.src = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" + cacheBuster;
   }
-  
-  function showResults(speed) {
-    var resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = "Your internet speed is " + speed.toFixed(2) + " Mbps.";
-    document.getElementById("test-btn").disabled = false;
+
+  function showResults(startTime, endTime) {
+    var duration = (endTime - startTime) / 1000;
+    var bitsLoaded = 7864320;
+    var speedBps = (bitsLoaded / duration).toFixed(2);
+    var speedKbps = (speedBps / 1024).toFixed(2);
+    var speedMbps = (speedKbps / 1024).toFixed(2);
+    var resultElement = document.getElementById("result");
+    resultElement.innerHTML = "Your internet speed is: " + speedMbps + " Mbps";
   }
-  
